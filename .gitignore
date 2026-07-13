@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.db
+.env
+.env.*
+!.env.example
+data/ecdict.csv
+*.log
