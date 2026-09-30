@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  WordLoop design tokens.
+
+  Shape system (locked): cards 20px (rounded-[20px]), controls 12px
+  (rounded-xl), chips full pill. One accent (olive) across the app.
+
+  Color roles:
+    bg        page background
+    surface   cards
+    surface-2 inset areas (progress track, hover fills)
+    ink       primary text
+    ink-soft  secondary text
+    ink-mute  tertiary text (still >= 4.5:1 on bg)
+    line      hairline borders
+    accent    brand olive (buttons, links, progress)
+*/
+:root {
+  --bg: #fafaf7;
+  --surface: #ffffff;
+  --surface-2: #f1f2ee;
+  --ink: #1a1c1a;
+  --ink-soft: #4a4e4a;
+  --ink-mute: #6b706b;
+  --line: #e6e8e3;
+  --accent: #2f6b4f;
+  --accent-strong: #245640;
+  --accent-soft: rgba(47, 107, 79, 0.1);
+  --on-accent: #ffffff;
+}
+
+.dark {
+  --bg: #141714;
+  --surface: #1b1f1b;
+  --surface-2: #232823;
+  --ink: #e8ece7;
+  --ink-soft: #b7beb7;
+  --ink-mute: #929a92;
+  --line: #2c322c;
+  --accent: #7fc8a2;
+  --accent-strong: #96d6b4;
+  --accent-soft: rgba(127, 200, 162, 0.14);
+  --on-accent: #14201a;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-mute: var(--ink-mute);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-display: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+
+  html {
+    /* reserve the scrollbar lane so page width never jumps when content
+       height crosses the viewport (fixes horizontal jitter on Windows).
+       overflow-y:auto is required for Chrome to apply the gutter to the
+       viewport when html would otherwise default to overflow visible. */
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .card-shadow {
+    box-shadow: 0 12px 32px -14px color-mix(in oklab, var(--accent) 18%, transparent);
+  }
+
+  /* Word card entrance: one calm slide, disabled under reduced motion. */
+  .anim-card-in {
+    animation: card-in 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .anim-fade-up {
+    animation: fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-card-in,
+  .anim-fade-up {
+    animation: none;
+  }
+}
